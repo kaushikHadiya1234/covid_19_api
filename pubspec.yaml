@@ -38,6 +38,7 @@ dependencies:
   provider: ^6.0.5
   sizer: ^2.0.15
   http: any
+  cached_network_image: ^3.2.3
 
 dev_dependencies:
   flutter_test:

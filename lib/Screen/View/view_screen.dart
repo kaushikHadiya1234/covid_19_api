@@ -77,7 +77,7 @@ Widget Custom(String? name,String? value)
   return  Row(
     children: [
       Text("$name : ",style: TextStyle(fontSize: 16.sp,fontWeight: FontWeight.bold,color: Colors.black),),
-      Text("$value",style: TextStyle(fontSize: 16.sp,fontWeight: FontWeight.bold,color: Colors.teal),maxLines: 1,),
+      Expanded(child: Container(child: Text("$value",style: TextStyle(fontSize: 16.sp,fontWeight: FontWeight.bold,color: Colors.teal),maxLines: 1,))),
     ],
   );
 }

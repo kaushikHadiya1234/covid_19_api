@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:covid_19/Screen/Model/covid_Model.dart';
 import 'package:covid_19/Screen/Provider/covid_provider.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   CovidProvider? pf;
   CovidProvider? pt;
-
   @override
   Widget build(BuildContext context) {
     pf = Provider.of<CovidProvider>(context, listen: false);
@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
               if (snapshot.hasError) {
                 return Center(child: Text("lose Conection"));
               } else if (snapshot.hasData) {
-                List<CovidModel> list = snapshot.data!;
+                pf!.getDataList(snapshot.data!);
                 return GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3, mainAxisExtent: 23.h),
@@ -44,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     return Center(
                       child: InkWell(
                          onTap: () {
-                           Navigator.pushNamed(context, 'view',arguments: list[index]);
+                           Navigator.pushNamed(context, 'view',arguments: pf!.list[index]);
                          },
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
@@ -52,21 +52,30 @@ class _HomeScreenState extends State<HomeScreen> {
                             Container(
                               height: 15.h,
                               width: 15.h,
-                              alignment: Alignment.center,
+                              // alignment: Alignment.center,
                               margin: EdgeInsets.all(5),
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(20),
-                                  image: DecorationImage(
-                                      image: NetworkImage(
-                                          "${list[index].countryInfo!.flag}"),
-                                      fit: BoxFit.fill)),
+                                  // image: DecorationImage(
+                                  //     image: NetworkImage(
+                                  //         "${pf!.list[index].countryInfo!.flag}"),
+                                  //     fit: BoxFit.fill)
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: CachedNetworkImage(
+                                  progressIndicatorBuilder: (context, url, progress) => Center(
+                                      child:Image.asset('assets/images/flag.png',width: 10.h,)
+                                  ),
+                                  imageUrl:'${pt!.list1[index].countryInfo!.flag}',fit: BoxFit.fill),
+                              ),
                             ),
                             SizedBox(
                               height: 10,
                             ),
                             Text(
-                              "${list[index].country}",
+                              "${pf!.list[index].country}",
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w500),
                               maxLines: 2,
@@ -77,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     );
                   },
-                  itemCount: list.length,
+                  itemCount: pf!.list.length,
                 );
               }
               return Center(
